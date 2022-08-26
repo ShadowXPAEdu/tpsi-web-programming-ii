@@ -14,7 +14,7 @@ To run the assignment simply open it on Visual Studio, and press "Run".
 Assignment 1:
 
 [@ShadowXPA](https://github.com/ShadowXPA)  
-[@leandrofidalgo](https://github.com/leandrofidalgo)
+[@leandrofidalgo](https://github.com/leandrofidalgo)  
 Claúdio Nunes
 
 ## Conclusions
