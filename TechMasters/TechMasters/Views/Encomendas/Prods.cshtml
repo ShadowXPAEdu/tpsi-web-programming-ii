@@ -1,0 +1,49 @@
+﻿@model IEnumerable<TrabalhoPartico.Models.Produto>
+@using TrabalhoPartico.Models
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <title>Prods</title>
+</head>
+<body style="padding: 0">
+    @if (ViewBag.modelo == "ProdCar")
+    {
+        @Html.ActionLink("Actualizar", "Prods", new { str = ViewBag.modelo }, new { @class = "btn btn-sm btn-primary", @style = "margin-left: 22px; margin-bottom: 22px;" })
+    }
+    <table class="table table-responsive table-striped">
+        @foreach (var m in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(mo => m.Nome)
+                </td>
+                @if (ViewBag.modelo == "ProdCar")
+                {
+                    <td>
+                        @Html.DisplayFor(mo => ((Carrinho)Session["CarEnc"]).Produtos.Where(n => n.Produto.Id == m.Id).FirstOrDefault().Quantidade)
+                    </td>
+                }
+                <td>
+                    @if (ViewBag.modelo == "Prods")
+                    {
+                        @Html.ActionLink("+", "AddProd", new { id = m.Id, str2 = ViewBag.modelo }, new { @class = "btn btn-sm btn-warning", @style = "margin-left: 22px" })
+                    }
+                    else
+                    {
+                        @Html.ActionLink("-", "AddProd", new { id = m.Id, str2 = ViewBag.modelo }, new { @class = "btn btn-sm btn-danger", @style = "margin-left: 22px" })
+                    }
+                </td>
+            </tr>
+        }
+    </table>
+</body>
+</html>

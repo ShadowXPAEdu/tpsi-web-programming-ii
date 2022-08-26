@@ -1,0 +1,88 @@
+﻿@model TrabalhoPartico.Models.Venda
+@using TrabalhoPartico.Models
+@using System.Data.SqlClient;
+
+@{
+    ViewBag.Title = "Detalhes da compra nº " + Model.Id;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ApplicationDbContext db = new ApplicationDbContext();
+    Cliente cli = db.Clientes.SqlQuery("SELECT [Cli1].[Id] AS[Id], [Cli1].[Nome] AS[Nome], [Cli1].[Morada] AS[Morada], [Cli1].[NIF] AS[NIF], [Cli1].[Telefone] AS[Telefone]  FROM[dbo].[Clientes] AS[Cli1], [dbo].[Vendas] AS[Ven1] WHERE[Cli1].[Id] = [Ven1].[Cliente_Id] and [Ven1].[Id] = @idVenda", new SqlParameter("@idVenda", Model.Id)).FirstOrDefault();
+}
+
+<h2>@ViewBag.Title</h2>
+
+<br />
+<div>
+    <h4>Venda</h4>
+    <br />
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            ID da compra
+        </dt>
+        <dd>
+            @Html.DisplayFor(m => m.Id)
+        </dd>
+
+        <dt>
+            ID do cliente
+        </dt>
+
+        <dd>
+            @cli.Id
+        </dd>
+
+        <dt>
+            Cliente
+        </dt>
+        <dd>
+            @cli.Nome
+        </dd>
+
+        <dt>
+            Data da compra
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DataCompra)
+        </dd>
+
+    </dl>
+
+    <hr />
+
+    <br />
+    <h4>Lista de produtos</h4>
+    <br />
+    <table class="table table-responsive table-striped">
+        <tr>
+            <th>
+                Produto
+            </th>
+            <th>
+                Quantidade
+            </th>
+        </tr>
+        @{
+            int c = db.ProdQuants.SqlQuery("SELECT [PQ1].[Id] AS[Id], [PQ1].[Quantidade] AS[Quantidade]  FROM[dbo].[Vendas] AS[Ven1], [dbo].[ProdQuants] AS[PQ1] WHERE[PQ1].[Venda_Id] = [Ven1].[Id] and [Ven1].[Id] = @idVenda", new SqlParameter("@idVenda", Model.Id)).Count();
+            for (int i = 0; i < c; i++)
+            {
+                var prods = db.Produtos.SqlQuery("SELECT [Pro1].[Id] AS[Id], [Pro1].[Nome] AS[Nome], [Pro1].[Preco] AS[Preco], [Pro1].[Stock] AS[Stock], [Pro1].[Descricao] AS[Descricao], [Pro1].[UrlImg] AS[UrlImg], [Pro1].[Desconto] AS[Desconto]  FROM[dbo].[Produtoes] AS[Pro1], [dbo].[Vendas] AS[Ven1], [dbo].[ProdQuants] AS[PQ1] WHERE[PQ1].[Venda_Id] = [Ven1].[Id] and [Ven1].[Id] = @idVenda and [PQ1].[Produto_Id] = [Pro1].[Id]", new SqlParameter("@idVenda", Model.Id)).ElementAt(i);
+                var prodQuants = db.ProdQuants.SqlQuery("SELECT [PQ1].[Id] AS[Id], [PQ1].[Quantidade] AS[Quantidade]  FROM[dbo].[Vendas] AS[Ven1], [dbo].[ProdQuants] AS[PQ1] WHERE[PQ1].[Venda_Id] = [Ven1].[Id] and [Ven1].[Id] = @idVenda", new SqlParameter("@idVenda", Model.Id)).ElementAt(i);
+                <tr>
+                    <td>
+                        @prods.Nome
+                    </td>
+                    <td>
+                        @prodQuants.Quantidade
+                    </td>
+                </tr>
+            }
+        }
+
+    </table>
+</div>
+<br />
+<p>
+    @Html.ActionLink("Voltar Atrás", "Compras", new { id = cli.Id }, new { @class = "btn btn-sm btn-default" })
+</p>

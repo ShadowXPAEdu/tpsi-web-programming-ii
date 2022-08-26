@@ -1,0 +1,73 @@
+﻿@model IEnumerable<TrabalhoPartico.Models.Cliente>
+@using TrabalhoPartico.Models
+@using System.Data.SqlClient;
+
+@{
+    ViewBag.Title = "Gerir os Clientes";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@ViewBag.Title</h2>
+<br />
+
+<p>
+    @* @Html.ActionLink("Create New", "Create") | *@
+    @Html.ActionLink("Voltar Atrás", "../Gerir/Index", null, new { @class = "btn btn-sm btn-warning" })
+</p>
+<br />
+<table class="table table-striped">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Nome)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Morada)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.NIF)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Telefone)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        @*
+            Verificar se o utilizador atual no ciclo é administrador ou gestor de produtos...
+            Não proteje contra colocar o ID do utilizador para Editar/VerDetalhes/Apagar
+            Apenas desativa os botões
+        *@
+        ApplicationDbContext db = new ApplicationDbContext();
+        var adminRoleId = db.Roles.Where(aId => aId.Name == "Admin").FirstOrDefault().Id;
+        var gestorProdRoleId = db.Roles.Where(gpId => gpId.Name == "GestorProd").FirstOrDefault().Id;
+        var isAdmin = db.Roles.Where(a => a.Users.Where(b => b.UserId == item.Id).FirstOrDefault().RoleId == adminRoleId).FirstOrDefault();
+        var isGestor = db.Roles.Where(a => a.Users.Where(b => b.UserId == item.Id).FirstOrDefault().RoleId == gestorProdRoleId).FirstOrDefault();
+
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nome)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Morada)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NIF)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Telefone)
+            </td>
+            <td>
+                @if (!(isAdmin != null || isGestor != null))
+                {
+                    <span>
+                        @Html.ActionLink("Editar", "Edit", new { id = item.Id }, new { @class = "btn btn-sm btn-info" }) |
+                        @Html.ActionLink("Apagar", "Delete", new { id = item.Id }, new { @class = "btn btn-sm btn-danger" })
+                    </span>
+                }
+            </td>
+        </tr>
+    }
+
+</table>

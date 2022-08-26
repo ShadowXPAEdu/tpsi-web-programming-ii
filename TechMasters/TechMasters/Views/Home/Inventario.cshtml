@@ -1,0 +1,170 @@
+﻿@model IEnumerable<TrabalhoPartico.Models.Produto>
+@using TrabalhoPartico.Models
+
+@{
+    ViewBag.Title = "Inventário";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    /*
+    .div_prod {
+        border: solid 1px;
+        border-radius: 14px;
+        width: auto;
+        height: 375px;
+    }*/
+
+    .img_prod {
+        display: block;
+        margin: 0 auto;
+        padding: 22px 22px 0 22px;
+        width: auto;
+        height: 150px;
+        max-width: 216px;
+    }
+
+    .info_prod {
+        padding: 22px;
+    }
+
+    .nome_prod {
+        font-weight: bold;
+        font-size: 20px;
+    }
+
+    .preco_prod {
+        font-size: 16px;
+    }
+
+    .precoSD_prod {
+        color: #ff0000;
+        font-weight: bold;
+        margin-left: 14px;
+    }
+
+    .desconto_prod {
+        font-size: 16px;
+        color: #5cb85c;
+        font-weight: bold;
+    }
+
+    .product-item {
+        width: 300px;
+        height: 522px;
+        float: left;
+        border: solid 1px lightgray;
+        padding: 20px 20px 0 20px;
+        border-radius: 5px;
+        margin: 10px;
+        position: relative;
+    }
+
+    .btns {
+        display: block;
+        position: absolute;
+        bottom: 22px;
+        margin: 0 auto;
+        padding: 0 22px;
+        width: 100%;
+    }
+
+    .btns > * {
+        margin: 9px 0 0;
+    }
+
+    .btns > a {
+        display: block;
+        width: 214px;
+        margin: 14px 0;
+    }
+</style>
+
+<h2>@ViewBag.Title</h2>
+<br />
+@*
+    <p>
+        @Html.ActionLink("Create New", "Create")
+    </p>
+*@
+<br />
+<input type="text" placeholder="Procurar produto" class="form-control" id="search" />
+<hr />
+<div class="product-list table-responsive">
+    @*<table class="table table-responsive">*@
+    @{
+        @*int totalCel = Model.Count();
+            double totalLin = Math.Ceiling((double)(totalCel / 4.0));
+            for (int linha = 1; linha <= totalLin && totalCel > 0; linha++)
+            {*@
+        @*<tr>*@
+        for (int coluna = 0; coluna < Model.Count(); coluna++)
+        {
+            Produto prod = Model.ElementAt(Model.Count() - (coluna + 1));
+            @*<td class="">*@
+            <div class="div_prod product-item">
+                <img src="@prod.UrlImg" class="img_prod" />
+                <p class="info_prod">
+                    <span class="nome_prod product-name">@prod.Nome</span>
+                </p>
+                <br />
+                @{
+                    double preco = prod.Preco * (1 - prod.Desconto);
+                    <div class="btns">
+                        <span class="preco_prod">
+                            @preco €
+                            @if (prod.Desconto > 0)
+                            {
+                                <s class="preco_prod precoSD_prod">@prod.Preco €</s>
+                            }
+                        </span>
+                        <br />
+                        @if (prod.Desconto > 0)
+                        {
+                            double desconto = prod.Desconto * 100;
+                            <span class="desconto_prod">
+                                - @desconto %
+                            </span>
+                        }
+                        <br />
+                        @if (prod.Stock <= 0)
+                        {
+                            <span class="label label-danger">
+                                Não existe em stock.
+                            </span>
+                        }
+                        else if (prod.Stock < 10)
+                        {
+                            <span class="label label-warning">
+                                Stock limitado.
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="label label-success">
+                                Existe em stock.
+                            </span>
+                        }
+                        <br />
+                        @Html.ActionLink("Ver Detalhes", "Detalhes", new { id = prod.Id }, new { @class = "btn btn-sm btn-info" })
+                        @if (prod.Stock > 0 && Request.IsAuthenticated)
+                        {
+                            @Html.ActionLink("Adicionar ao Carrinho", "AddCarrinho", new { id = prod.Id, str = "AddFromInv" }, new { @class = "btn btn-sm btn-primary" })
+                        }
+                        else
+                        {
+                            <a href="#" class="btn btn-sm btn-primary">Adicionar ao Carrinho</a>
+                        }
+                    </div>
+                }
+            </div>
+            @*</td>*@
+            @*{
+                    totalCel--;
+                }*@
+        }
+        @*</tr>*@
+    }
+
+    @*</table>*@
+</div>

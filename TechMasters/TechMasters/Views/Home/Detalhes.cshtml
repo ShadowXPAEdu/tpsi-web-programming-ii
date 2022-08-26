@@ -1,0 +1,159 @@
+﻿@model TrabalhoPartico.Models.Produto
+
+@{
+    ViewBag.Title = Model.Nome;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .div_prod {
+        width: auto;
+        padding: 22px;
+        display: block;
+    }
+
+    .img_prod {
+        display: block;
+        margin: 100px auto;
+        padding: 22px;
+        width: 500px;
+        height: 500px;
+    }
+
+    .info_prod {
+        padding: 22px;
+    }
+
+    .nome_prod {
+        font-weight: bold;
+        font-size: 20px;
+    }
+
+    .preco_prod {
+        font-size: 14px;
+    }
+
+    .precoSD_prod {
+        color: #ff0000;
+        font-weight: bold;
+    }
+
+    .desconto_prod {
+        font-size: 14px;
+        color: #5cb85c;
+        font-weight: bold;
+    }
+
+    .cat_desc {
+        font-size: 11px;
+    }
+</style>
+<h2>@ViewBag.Title</h2>
+<br />
+<p>
+    @Html.ActionLink("Voltar Atrás", "Inventario", null, new { @class = "btn btn-sm btn-warning" })
+</p>
+<br />
+<div class="container tab-content">
+    <table class="table table-responsive">
+        <tr>
+            <td>
+                <img src="@Model.UrlImg" class="img_prod" />
+            </td>
+
+            <td>
+                <div class="div_prod">
+                    <h3>Informação do produto:</h3>
+                    <br />
+                    <br />
+                    <p>
+                        <b>Nome:</b>
+                        <br />
+                        @Model.Nome
+                    </p>
+                    <br />
+                    <p>
+                        <b>Descrição:</b>
+                        <br />
+                        @Model.Descricao
+                    </p>
+                    <br />
+                    <p>
+                        <b>Preço:</b>
+                        <br />
+                        @{
+                            double preco = Model.Preco * (1 - Model.Desconto);
+                            <span class="preco_prod">
+                                @preco €
+                                @if (Model.Desconto > 0)
+                                {
+                                    <s class="preco_prod precoSD_prod">@Model.Preco €</s>
+                                }
+                            </span>
+                            <br />
+                            if (Model.Desconto > 0)
+                            {
+                                double desconto = Model.Desconto * 100;
+                                <span class="desconto_prod">
+                                    - @desconto %
+                                </span>
+                            }
+                        }
+                    </p>
+                    <br />
+                    <p>
+                        <b>Stock:</b>
+                        <br />
+                        @{
+                            if (Model.Stock <= 0)
+                            {
+                                <span class="label label-danger">
+                                    Não existe em stock.
+                                </span>
+                            }
+                            else if (Model.Stock < 10)
+                            {
+                                <span class="label label-warning">
+                                    Stock limitado.
+                                </span>
+                                <span class="cat_desc">
+                                    <br />
+                                    Em stock: @Model.Stock
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="label label-success">
+                                    Existe em stock.
+                                </span>
+                                <span class="cat_desc">
+                                    <br />
+                                    Em stock: @Model.Stock
+                                </span>
+                            }
+                        }
+                    </p>
+                    <br />
+                    <p>
+                        <b>Categoria:</b>
+                        <br />
+                        @Model.Categoria.Nome
+                        <br />
+                        <span class="cat_desc">@Model.Categoria.Descricao</span>
+                    </p>
+
+                    <br />
+
+                    @if (Model.Stock > 0 && Request.IsAuthenticated)
+                    {
+                        @Html.ActionLink("Adicionar ao Carrinho", "AddCarrinho", new { id = Model.Id, str = "AddFromDet" }, new { @class = "btn btn-sm btn-primary", @style = "margin: 14px auto; display:block" })
+                    }
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+        </tr>
+    </table>
+</div>

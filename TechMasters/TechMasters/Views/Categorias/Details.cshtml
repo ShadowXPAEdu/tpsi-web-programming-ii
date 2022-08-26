@@ -1,0 +1,38 @@
+﻿@model TrabalhoPartico.Models.Categoria
+
+@{
+    ViewBag.Title = "Detalhes Categoria";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<br />
+<div>
+    <h4>Categoria</h4>
+    <br />
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            Nome da Categoria
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Nome)
+        </dd>
+
+        <dt>
+            Descrição
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Descricao)
+        </dd>
+
+    </dl>
+</div>
+<br />
+<p>
+    @Html.ActionLink("Editar", "Edit", new { id = Model.Id }, new { @class = "btn btn-sm btn-info" }) |
+    @Html.ActionLink("Voltar Atrás", "Index", null, new { @class = "btn btn-sm btn-default" })
+</p>
