@@ -21,4 +21,4 @@ Claúdio Nunes
 
 This subject was the continuation of the first web programming subject. In the first one we learned about **JavaScript**, and in this one we learned an entire framework that allows us to create a full website.  
 
-Final Grade: 17
+Final Grade: 15
