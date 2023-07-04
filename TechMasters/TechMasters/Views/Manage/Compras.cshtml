@@ -1,0 +1,40 @@
+﻿@model IEnumerable<Venda>
+@using TrabalhoPartico.Models
+
+@{
+    ViewBag.Title = "Suas compras";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@ViewBag.Title</h2>
+<br />
+<p>
+    @Html.ActionLink("Voltar Atrás", "Index", null, new { @class = "btn btn-sm btn-warning" })
+</p>
+<hr />
+<table class="table table-responsive table-striped">
+    <tr>
+        <th>
+            ID da compra
+        </th>
+        <th>
+            Data da compra
+        </th>
+        <th></th>
+    </tr>
+    @foreach (Venda v in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(ve => v.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(ve => v.DataCompra)
+            </td>
+            <td>
+                @Html.ActionLink("Detalhes", "DetCom", new { id = v.Id }, new { @class = "btn btn-sm btn-default" })
+            </td>
+        </tr>
+    }
+</table>
+

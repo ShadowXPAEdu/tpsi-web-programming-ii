@@ -1,0 +1,56 @@
+﻿@model TrabalhoPartico.Models.Encomendas
+@using System.Data.SqlClient;
+@using TrabalhoPartico.Models
+
+@{
+    ViewBag.Title = "Encomendar Produtos";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .spanEncomendas {
+        max-width: 280px;
+    }
+</style>
+
+<h2>@ViewBag.Title</h2>
+<br />
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Encomendas</h4>
+        <br />
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="form-group">
+            <label class="control-label col-md-2" for="Estado">Estado</label>
+            <div class="col-md-10">
+                <span class="form-control spanEncomendas">
+                    Pendente
+                </span>
+            </div>
+        </div>
+
+        <hr />
+
+        <div class="form-group">
+            <label class="control-label col-md-2" for="Prods"></label>
+            <div class="col-md-12">
+                <iframe id="prod" scrolling="auto" src="ProdsV2" style="width: 85%; min-height: 640px; margin: 0 auto; display: block;"></iframe>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Encomendar" class="btn btn-sm btn-success" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Voltar Atrás", "Index", null, new { @class = "btn btn-sm btn-default" })
+</div>

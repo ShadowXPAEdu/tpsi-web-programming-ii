@@ -1,0 +1,45 @@
+﻿@model TrabalhoPartico.Models.Categoria
+
+@{
+    ViewBag.Title = "Apagar Categoria";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<br />
+<h3>Tem a certeza que dejesa apagar?</h3>
+<div>
+    <h4>Categoria</h4>
+    <br />
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            Nome da Categoria
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Nome)
+        </dd>
+
+        <dt>
+            Descrição
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Descricao)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <br />
+        <div class="form-actions no-color">
+            <input type="submit" value="Apagar" class="btn btn-sm btn-danger" /> |
+            @Html.ActionLink("Voltar Atrás", "Index", null, new { @class = "btn btn-sm btn-default" })
+        </div>
+    }
+</div>

@@ -1,0 +1,103 @@
+﻿@model TrabalhoPartico.Models.Produto
+
+@{
+    ViewBag.Title = "Detalhes Produto";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<br />
+<div>
+    <h4>Produto</h4>
+    <br />
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            Nome do Produto
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Nome)
+        </dd>
+
+        <dt>
+            Preço
+        </dt>
+
+        @{
+            var test = Model.Preco * (1 - Model.Desconto);
+            <dd>
+                @test €
+                @if (Model.Desconto > 0)
+                {
+                    <br />
+                    <s>@Model.Preco €</s>
+                }
+            </dd>
+        }
+
+        @if (Model.Desconto > 0)
+        {
+            <dt>
+                Desconto
+            </dt>
+
+            var test2 = Model.Desconto * 100;
+            <dd>
+                @test2 %
+            </dd>
+        }
+
+        <dt>
+            Quantidade em Stock
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Stock)
+        </dd>
+
+        <dt>
+            Descrição
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Descricao)
+        </dd>
+
+        <dt>
+            Imagem
+        </dt>
+
+        <dd>
+            <img src="@Model.UrlImg" style="height: 200px; border: solid 1px lightgray;" />
+        </dd>
+
+    </dl>
+
+    <hr />
+
+    <h4>Categoria</h4>
+    <dl class="dl-horizontal">
+        <dt>
+            Nome da Categoria
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Categoria.Nome)
+        </dd>
+
+        <dt>
+            Descrição
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Categoria.Descricao)
+        </dd>
+    </dl>
+</div>
+<br />
+<p>
+    @Html.ActionLink("Editar", "Edit", new { id = Model.Id }, new { @class = "btn btn-sm btn-info" }) |
+    @Html.ActionLink("Voltar Atrás", "Index", null, new { @class = "btn btn-sm btn-default" })
+</p>

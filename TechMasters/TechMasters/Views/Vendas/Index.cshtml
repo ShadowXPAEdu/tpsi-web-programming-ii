@@ -1,0 +1,63 @@
+﻿@model IEnumerable<TrabalhoPartico.Models.Venda>
+@using TrabalhoPartico.Models
+@using System.Data.SqlClient;
+
+@{
+    ViewBag.Title = "Vendas";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ApplicationDbContext db = new ApplicationDbContext();
+}
+
+<h2>@ViewBag.Title</h2>
+
+<br />
+
+<p>
+    @*
+        @Html.ActionLink("Create New", "Create")
+    *@
+    @Html.ActionLink("Voltar Atrás", "../Gerir/Index", null, new { @class = "btn btn-sm btn-warning" })
+</p>
+
+<br />
+<table class="table table-responsive table-striped">
+    <tr>
+        <th>
+            ID da compra
+        </th>
+        <th>
+            ID do cliente
+        </th>
+        <th>
+            Cliente
+        </th>
+        <th>
+            Data da compra
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        Cliente cli = db.Clientes.SqlQuery("SELECT [Cli1].[Id] AS[Id], [Cli1].[Nome] AS[Nome], [Cli1].[Morada] AS[Morada], [Cli1].[NIF] AS[NIF], [Cli1].[Telefone] AS[Telefone]  FROM[dbo].[Clientes] AS[Cli1], [dbo].[Vendas] AS[Ven1] WHERE[Cli1].[Id] = [Ven1].[Cliente_Id] and [Ven1].[Id] = @idVenda", new SqlParameter("@idVenda", item.Id)).FirstOrDefault();
+
+        <tr>
+            <td>
+                @Html.DisplayFor(m => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(m => cli.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(m => cli.Nome)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DataCompra)
+            </td>
+            <td>
+                @Html.ActionLink("Detalhes", "Details", new { id = item.Id }, new { @class = "btn btn-sm btn-default" })
+            </td>
+        </tr>
+    }
+
+</table>

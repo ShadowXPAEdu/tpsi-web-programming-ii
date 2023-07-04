@@ -1,0 +1,78 @@
+﻿@model IEnumerable<TrabalhoPartico.Models.Encomendas>
+@using System.Data.SqlClient;
+@using TrabalhoPartico.Models
+
+@{
+    ViewBag.Title = "Gerir as Encomendas";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<br />
+<p>
+    @Html.ActionLink("Nova Encomenda", "Create", null, new { @class = "btn btn-sm btn-success" }) |
+    @Html.ActionLink("Voltar Atrás", "../Gerir/Index", null, new { @class = "btn btn-sm btn-warning" })
+</p>
+<br />
+<table class="table table-responsive table-striped">
+    <tr>
+        <th>
+            ID da encomenda
+        </th>
+        <th>
+            Preço Total
+        </th>
+        <th>
+            Estado
+        </th>
+        <th>
+            Data da Encomenda
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr id="e_@item.Id">
+            <td>
+                @Html.DisplayFor(m => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PrecoTotal) €
+            </td>
+            <td>
+                @if (item.Estado == "Entregue")
+                {
+                    <span class="label label-success">
+                        @Html.DisplayFor(modelItem => item.Estado)
+                    </span>
+                }
+                else if (item.Estado == "Pendente")
+                {
+                    <span class="label label-warning">
+                        @Html.DisplayFor(modelItem => item.Estado)
+                    </span>
+                }
+                else if (item.Estado == "Cancelado")
+                {
+                    <span class="label label-danger">
+                        @Html.DisplayFor(modelItem => item.Estado)
+                    </span>
+                }
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DataEncomenda)
+            </td>
+            <td>
+                @if (item.Estado == "Pendente")
+                {
+                    @Html.ActionLink("Entregue", "Entregue", "Encomendas", null, null, "e_" + item.Id, new { id = item.Id }, new { @class = "btn btn-sm btn-success" })<span> |</span>
+                    @Html.ActionLink("Cancelar", "Delete", "Encomendas", null, null, "e_" + item.Id, new { id = item.Id }, new { @class = "btn btn-sm btn-danger" })<span> |</span>
+                }
+                @Html.ActionLink("Detalhes", "Details", new { id = item.Id }, new { @class = "btn btn-sm btn-default" })
+            </td>
+        </tr>
+    }
+
+</table>

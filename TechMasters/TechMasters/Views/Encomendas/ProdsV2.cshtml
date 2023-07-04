@@ -1,0 +1,87 @@
+﻿@model IEnumerable<TrabalhoPartico.Models.Produto>
+@using TrabalhoPartico.Models
+
+@{
+    Layout = null;
+    if ((Carrinho)Session["CarEnc"] == null)
+    {
+        Session["CarEnc"] = new Carrinho();
+    }
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <title>ProdsV2</title>
+
+    <style>
+        .spanEncomendas {
+            max-width: 280px;
+        }
+    </style>
+</head>
+<body style="padding: 14px 0;">
+    <div>
+        <div class="form-group">
+            <label class="control-label col-md-2" for="PrecoTotal">Preço Total</label>
+            <div class="col-md-10">
+                <span class="form-control spanEncomendas">
+                    @(((Carrinho)Session["CarEnc"]).GetPriceEnc()) €
+                </span>
+            </div>
+        </div>
+    </div>
+    <div style="display: inline-block; width:auto; padding: 14px">
+        <table class="table table-responsive table-striped top">
+            <tr>
+                <th>
+                    Produtos
+                </th>
+                <th></th>
+            </tr>
+            @foreach (var m in Model)
+            {
+                <tr>
+                    <td id="s_@m.Id">
+                        @Html.DisplayFor(mo => m.Nome)
+                    </td>
+                    <td>
+                        @Html.ActionLink("+", "AddProd2", "Encomendas", null, null, "s_" + m.Id, new { id = m.Id, str2 = "Prods" }, new { @class = "btn btn-sm btn-success", @style = "margin-left: 22px" })
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+    <div style="display: inline-block; width:auto; float: right; padding: 14px">
+        <table class="table table-responsive table-striped">
+            <tr>
+                <th>
+                    Produtos a encomendar
+                </th>
+                <th></th>
+                <th></th>
+            </tr>
+            @foreach (var m in ((Carrinho)Session["CarEnc"]).Produtos)
+            {
+                <tr>
+                    <td id="c_@m.Produto.Id">
+                        @Html.DisplayFor(mo => m.Produto.Nome)
+                    </td>
+                    <td>
+                        <b>
+                            [@Html.DisplayFor(mo => m.Quantidade)]
+                        </b>
+                    </td>
+                    <td>
+                        @Html.ActionLink("-", "AddProd2", "Encomendas", null, null, "c_" + m.Produto.Id, new { id = m.Produto.Id, str2 = "ProdCar" }, new { @class = "btn btn-sm btn-danger", @style = "margin-left: 22px" })
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+</body>
+</html>

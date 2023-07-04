@@ -1,0 +1,73 @@
+﻿@using TrabalhoPartico.Models
+
+@{
+    ViewBag.Title = "Carrinho";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@ViewBag.Title</h2>
+<br />
+<br />
+
+@if (Session["Carrinho"] == null)
+{
+    Session["Carrinho"] = new Carrinho();
+}
+
+<table class="table table-responsive table-striped">
+    <tr>
+        <th></th>
+    </tr>
+
+    @foreach (ProdQuant item in ((Carrinho)Session["Carrinho"]).Produtos)
+    {
+        <tr>
+            <td>
+                <div>
+                    <span class="pull-left">
+                        <b>Produto:</b>
+                        <br />&nbsp;&nbsp;&nbsp;&nbsp;@item.Produto.Nome
+                    </span>
+                    <div class="pull-right">
+                        @{
+                            double preco = (item.Produto.Preco * (1 - item.Produto.Desconto)) * item.Quantidade;
+                            <span style="padding-right: 22px">
+                                @preco €
+                            </span>
+                        }
+                        <span>
+                            @Html.ActionLink("-", "AddCarrinho", new { id = item.Produto.Id, str = "DecFromCar" }, new { @class = "btn btn-warning" })
+                            <span>
+                                <b>&nbsp;[@item.Quantidade]&nbsp;</b>
+                            </span>
+                            @Html.ActionLink("+", "AddCarrinho", new { id = item.Produto.Id, str = "AddFromCar" }, new { @class = "btn btn-success" })
+                        </span>
+                        <span style="padding-left: 22px">
+                            @Html.ActionLink("Remover", "AddCarrinho", new { id = item.Produto.Id, str = "RemFromCar" }, new { @class = "btn btn-danger" })
+                        </span>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    }
+
+    <tr>
+        <td>
+            <div class="pull-right">
+                <span>
+                    <b>Total:</b>
+                </span>
+                <span>
+                    @(((Carrinho)Session["Carrinho"]).GetPrice()) €
+                </span>
+                @if (((Carrinho)Session["Carrinho"]).GetNumProd() > 0)
+                {
+                    <span style="padding-left: 22px">
+                        @Html.ActionLink("Comprar", "EfetuarCompra", null, new { @class = "btn btn-primary" })
+                    </span>
+                }
+            </div>
+        </td>
+    </tr>
+
+</table>

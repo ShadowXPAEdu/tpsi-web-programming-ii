@@ -1,0 +1,44 @@
+﻿@using Microsoft.AspNet.Identity
+@using TrabalhoPartico.Models
+
+<style>
+    a.carrinho {
+        background: url(../../../../../Imagens/carrinhodecompras.png) no-repeat;
+        background-position: center;
+        background-size: 30px;
+        display: block;
+        text-indent: -9999px;
+    }
+</style>
+
+@if (Request.IsAuthenticated)
+{
+    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+    {
+        if (Session["Carrinho"] == null)
+        {
+            Session["Carrinho"] = new Carrinho();
+        }
+
+        ApplicationDbContext db = new ApplicationDbContext();
+        @Html.AntiForgeryToken()
+
+        <ul class="nav navbar-nav navbar-right">
+            <li>@Html.ActionLink("Carrinho", "Carrinho", "Home", null, new { @class = "carrinho navbar-brand" })<span class="label label-primary">@(((Carrinho)Session["Carrinho"]).GetNumProd())</span></li>
+            <li>
+                @Html.ActionLink("Olá " + db.Clientes.Find(User.Identity.GetUserId()).Nome + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
+            </li>
+            @*<li><a href="javascript:document.getElementById('logoutForm').submit()">Sair</a></li>*@
+            <li>
+                @Html.ActionLink("Sair", "LogOff", "Account")
+            </li>
+        </ul>
+    }
+}
+else
+{
+    <ul class="nav navbar-nav navbar-right">
+        <li>@Html.ActionLink("Registar", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
+        <li>@Html.ActionLink("Entrar", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+    </ul>
+}

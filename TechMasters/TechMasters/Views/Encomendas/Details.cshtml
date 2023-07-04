@@ -1,0 +1,104 @@
+﻿@model TrabalhoPartico.Models.Encomendas
+@using TrabalhoPartico.Models
+@using System.Data.SqlClient;
+
+@{
+    ViewBag.Title = "Detalhes da encomenda nº " + Model.Id;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ApplicationDbContext db = new ApplicationDbContext();
+}
+
+<h2>@ViewBag.Title</h2>
+
+<br />
+<div>
+    <h4>Encomenda</h4>
+    <br />
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            ID da encomenda
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(m => m.Id)
+        </dd>
+
+        <dt>
+            Estado
+        </dt>
+
+        <dd>
+            @if (Model.Estado == "Entregue")
+            {
+                <span class="label label-success">
+                    @Html.DisplayFor(model => model.Estado)
+                </span>
+            }
+            else if (Model.Estado == "Pendente")
+            {
+                <span class="label label-warning">
+                    @Html.DisplayFor(model => model.Estado)
+                </span>
+            }
+            else if (Model.Estado == "Cancelado")
+            {
+                <span class="label label-danger">
+                    @Html.DisplayFor(model => model.Estado)
+                </span>
+            }
+        </dd>
+
+        <dt>
+            Data da encomenda
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DataEncomenda)
+        </dd>
+
+        <dt>
+            Preço Total
+        </dt>
+        <dd>
+            @Html.DisplayFor(m => m.PrecoTotal) €
+        </dd>
+    </dl>
+
+    <hr />
+
+    <br />
+    <h4>Lista de produtos</h4>
+    <br />
+    <table class="table table-responsive table-striped">
+        <tr>
+            <th>
+                Produto
+            </th>
+            <th>
+                Quantidade
+            </th>
+        </tr>
+        @{
+            int c = db.ProdQuants.SqlQuery("SELECT [PQ1].[Id] AS[Id], [PQ1].[Quantidade] AS[Quantidade]  FROM[dbo].[Encomendas] AS[Enc1], [dbo].[ProdQuants] AS[PQ1] WHERE[PQ1].[Encomendas_Id] = [Enc1].[Id] and [Enc1].[Id] = @idEncomenda", new SqlParameter("@idEncomenda", Model.Id)).Count();
+            for (int i = 0; i < c; i++)
+            {
+                var prods = db.Produtos.SqlQuery("SELECT [Pro1].[Id] AS[Id], [Pro1].[Nome] AS[Nome], [Pro1].[Preco] AS[Preco], [Pro1].[Stock] AS[Stock], [Pro1].[Descricao] AS[Descricao], [Pro1].[UrlImg] AS[UrlImg], [Pro1].[Desconto] AS[Desconto]  FROM[dbo].[Produtoes] AS[Pro1], [dbo].[Encomendas] AS[Enc1], [dbo].[ProdQuants] AS[PQ1] WHERE[PQ1].[Encomendas_Id] = [Enc1].[Id] and [Enc1].[Id] = @idEncomenda and [PQ1].[Produto_Id] = [Pro1].[Id]", new SqlParameter("@idEncomenda", Model.Id)).ElementAt(i);
+                var prodQuants = db.ProdQuants.SqlQuery("SELECT [PQ1].[Id] AS[Id], [PQ1].[Quantidade] AS[Quantidade]  FROM[dbo].[Encomendas] AS[Enc1], [dbo].[ProdQuants] AS[PQ1] WHERE[PQ1].[Encomendas_Id] = [Enc1].[Id] and [Enc1].[Id] = @idEncomenda", new SqlParameter("@idEncomenda", Model.Id)).ElementAt(i);
+                <tr>
+                    <td>
+                        @prods.Nome
+                    </td>
+                    <td>
+                        @prodQuants.Quantidade
+                    </td>
+                </tr>
+            }
+        }
+
+    </table>
+</div>
+<br />
+<p>
+    @Html.ActionLink("Voltar Atrás", "Index", null, new { @class = "btn btn-sm btn-default" })
+</p>

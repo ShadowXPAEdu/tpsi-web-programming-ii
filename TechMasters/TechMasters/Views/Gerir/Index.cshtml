@@ -1,0 +1,39 @@
+﻿
+@{
+    ViewBag.Title = "Gestão";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<br />
+<hr />
+
+<h4>Gerir Produtos:</h4>
+<br />
+<div style="padding-left: 22px">
+    <a href="~/Categorias/Index" class="btn btn-sm btn-primary">Gerir Categorias</a>
+</div>
+<br />
+<div style="padding-left: 22px">
+    <a href="~/Produtoes/Index" class="btn btn-sm btn-primary">Gerir Produtos</a>
+</div>
+<hr />
+<div style="padding-left: 22px">
+    <a href="~/Encomendas/Index" class="btn btn-sm btn-primary">Gerir Encomendas</a>
+</div>
+<br />
+<div style="padding-left: 22px">
+    <a href="~/Vendas/Index" class="btn btn-sm btn-primary">Gerir Vendas</a>
+</div>
+
+@if (User.IsInRole("Admin"))
+{
+    <hr />
+
+    <h4>Gerir Clientes:</h4>
+    <br />
+    <div style="padding-left: 22px">
+        <a href="~/Clientes/Index" class="btn btn-sm btn-danger">Gerir Clientes</a>
+    </div>
+}
